@@ -17,6 +17,48 @@
   * I'd like to have a run() function in LightSensor.cpp that accepts
   * a callback parameter pointing to a function that can be used for
   * an interrupt handler. I'll need to do some more work on LightSensor.cpp.
+  * Screw that. Just spawn a couple of threads off main, poll the light sensors,
+  * and then figure out what to do with them if needed.
+  * The whole concept of interrupts off the light sensors really goes against
+  * what they'll be used for.
+  * 
+  * IR sensors are so you don't bump into things, so they need to be able to
+  * interrupt program execution.
+  * The button is a primate interaction device, so that needs to be respond to
+  * an input in meat-space time.
+  * The light sensors are to be used to sense things.
+  * Do something, take a reading, adjust your actions
+  * The servos are essentially outputs. They'll do what they're told.
+  * 
+  * The big thing is really the ability to have interrupts.
+  * I need to be able to halt execution of the program in response to an
+  * event, and program execution, and possibly resume from where I was
+  * interrupted.
+  * 
+  * Based on how Arduino based obstacle avoiding robots work, the entire concept
+  * of an interrupt for this system might be overkill. Most of them are just moving
+  * forward, scanning, and then reacting if they sense an object.
+  * 
+  * I should throw some LEDs on the robot.
+  * 
+  * I need to see about taking over the HTTP server on the BBB.
+  * It looks like Cloud9 has been used for this, and quite a lot of other stuff.
+  * It allows for coding in BoneScript, JavaScript, and allows for autostaring
+  * stuff when the BBB starts. It doesn't offer a database. I can put up my own
+  * web pages by dropping html files into /var/lib/cloud9
+  * It may be too much of a pain in the ass to set up a new web server.
+  * I'd need to take down the cloud9 stuff (which came w/ the BBB), and replace
+  * it w/ XAMPP. Running XAMPP on the BBB won't be an issue, but getting cloud9
+  * out of the way may be a pain.
+  * The goal of the web server is to allow an easy interface for other systems.
+  * Wrong! It shouldn't be hard to disable the cloud9 stuff. It's just a service.
+  * The hard part is going to be getting the C++ code to interact with the database.
+  * Looks like there's probably a mysql.h library out there. Don't know if g++ has it.
+  * 
+  * 
+  * I NEED TO THROW AT LEAST ONE MORE BUTTON ON TO THE ROBOT!
+  * I need to have a power button.
+  * 
   */
 
 // Pull in C libraries
