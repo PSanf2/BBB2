@@ -25,6 +25,8 @@ namespace BBIO {
 	// This should be accepting a parameter for the period.
 	// The period isn't supposed to be changed at runtime.
 	// It's supposed to be set before you start the PWM generator running, and then left alone.
+	// use a default value for the parameter. don't duplicate code
+	/*
 	PWM::PWM(const char* key) {
 		_info.name = NULL;
 		_info.key = NULL;
@@ -66,6 +68,7 @@ namespace BBIO {
 		duty(0);
 		period(500000);
 	}
+	*/
 	
 	PWM::PWM(const char* key, const int per) {
 		_info.name = NULL;

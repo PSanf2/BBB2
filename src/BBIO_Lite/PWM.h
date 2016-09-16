@@ -33,8 +33,8 @@ namespace BBIO {
 	
 	class PWM {
 		public:
-			PWM(const char* key); // default period of 500000
-			PWM(const char* key, const int per); // allows you to set the period
+			//PWM(const char* key); // default period of 500000
+			PWM(const char* key, const int per = 500000); // allows you to set the period
 			~PWM();
 			void start();
 			void stop();
