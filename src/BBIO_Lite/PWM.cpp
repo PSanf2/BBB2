@@ -92,7 +92,7 @@ namespace BBIO {
 			// load the am33xx_pwm DTO
 			load_device_tree("am33xx_pwm");
 			// toggle _initialized
-			_initialized = !_initialized;
+			_initialized = true;
 		}
 		// load the bone_pwm_<key> DTO fragment
 		string dto = "bone_pwm_";

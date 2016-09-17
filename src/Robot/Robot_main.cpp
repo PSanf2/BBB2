@@ -59,12 +59,21 @@
   * I NEED TO THROW AT LEAST ONE MORE BUTTON ON TO THE ROBOT!
   * I need to have a power button.
   * 
+  * I can power the BBB by providing current to the VDD_5V rail on the P9 header.
+  * I know the servos work when I do this if I use the SYS_5V pin to drive the transistors.
+  * The power supply says the whole set up (low-voltage cutoff, buck converter, BBB) uses about
+  * 1/4 - 1/3 Amps when the BBB is running. The current draw will vary depending on what
+  * the BBB is doing. More intensive computations require more current to power the BBB.
+  * With the buck converter set at 5V I don't seem to have any issue with the voltage spike
+  * when the power is turned on. Giant capacitors for the win.
+  * 
   */
 
 // Pull in C libraries
 #include <iostream>		// pulls in cin and hex
 #include <cstdio>		// pulls in printf()
 #include <cstdlib>		// lets me use system()
+#include <ctime>		// lets me use clock_t and clock()
 
 // Pull in my object headers
 #include "Button.h"
@@ -83,6 +92,9 @@
 #define IR_SENSOR_PIN_1		"P8_12"
 #define IR_LED_PIN_2		"P9_14" // don't put the second IR LED on the same PWM channel.
 #define IR_SENSOR_PIN_2		"P8_10"
+
+// define my constants
+const int debounceDelay = 10000; // why not just use #define?
 
 // 'cause I got to
 using namespace std;
@@ -103,7 +115,9 @@ unsigned int menu_choice;
 void printMenu() {
 	printf("\n\t\t-----MAIN MENU-----");
 	printf("\n\t 1) Print Menu");
-	
+	printf("\n\t 2) IR LED Start");
+	printf("\n\t 3) IR LED and Servo Start");
+	printf("\n\t 4) Stop IR Sensor callbacks");
 	printf("\n\t 0) Quit");
 	printf("\nInput selection ");
 }
@@ -127,18 +141,49 @@ int button_callback(int var) {
 	printf("\nYou pushed the button!");
 }
 
+// callbacks for simple tests
+clock_t ir_1_debounce;
 int ir_sensor_1_callback(int var) {
-	
+	if ((clock() - ir_1_debounce) > debounceDelay) {
+		printf("\nPing from IR Sensor 1");
+	}
+	ir_1_debounce = clock();
 }
 
+clock_t ir_2_debounce;
 int ir_sensor_2_callback(int var) {
-	
+	if ((clock() - ir_2_debounce) > debounceDelay) {
+		printf("\nPing from IR Sensor 2");
+	}
+	ir_2_debounce = clock();
+}
+
+// callbacks for playing with servos
+clock_t servo_1_debounce;
+int servo_1_callback(int var) {
+	if ((clock() - servo_1_debounce) > debounceDelay) {
+		printf("\nPing from IR Sensor 1");
+		servo_1.duty(1500000);
+	} else {
+		servo_1.duty(1470000);
+	}
+	servo_1_debounce = clock();
+}
+
+// servo_2 does not seem to be responding
+clock_t servo_2_debounce;
+int servo_2_callback(int var) {
+	if ((clock() - servo_2_debounce) > debounceDelay) {
+		printf("\nPing from IR Sensor 2");
+		servo_2.duty(1500000);
+	} else {
+		servo_2.duty(1450000);
+	}
+	servo_2_debounce = clock();
 }
 
 // Main function
 int main(int argc, char* argv[]) {
-	
-	push_btn.wait(&button_callback);
 	
 	system("clear");
 	
@@ -154,6 +199,25 @@ int main(int argc, char* argv[]) {
 			
 			case 1:
 				; // do nothing. Menu will automatically print on next loop.
+			break;
+			
+			case 2:
+				ir_sensor_1.run(&ir_sensor_1_callback);
+				ir_sensor_2.run(&ir_sensor_2_callback);
+			break;
+			
+			case 3:
+				servo_1.start();
+				servo_2.start();
+				ir_sensor_1.run(&servo_1_callback);
+				ir_sensor_2.run(&servo_2_callback);
+			break;
+			
+			case 4:
+				servo_1.stop();
+				servo_2.stop();
+				ir_sensor_1.stop();
+				ir_sensor_2.stop();
 			break;
 			
 			case 0:
