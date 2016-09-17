@@ -93,9 +93,6 @@
 #define IR_LED_PIN_2		"P9_14" // don't put the second IR LED on the same PWM channel.
 #define IR_SENSOR_PIN_2		"P8_10"
 
-// define my constants
-const int debounceDelay = 10000; // why not just use #define?
-
 // 'cause I got to
 using namespace std;
 
@@ -108,16 +105,17 @@ PatricksDrivers::Servo servo_2(SERVO_PIN_2);
 PatricksDrivers::IR_LED_Sensor ir_sensor_1(IR_LED_PIN_1, IR_SENSOR_PIN_1);
 PatricksDrivers::IR_LED_Sensor ir_sensor_2(IR_LED_PIN_2, IR_SENSOR_PIN_2);
 
-// Declare variables
-unsigned int menu_choice;
-
 // Functions to put things on the screen.
 void printMenu() {
 	printf("\n\t\t-----MAIN MENU-----");
 	printf("\n\t 1) Print Menu");
 	printf("\n\t 2) IR LED Start");
-	printf("\n\t 3) IR LED and Servo Start");
-	printf("\n\t 4) Stop IR Sensor callbacks");
+	printf("\n\t 3) Stop IR callbacks");
+	printf("\n\t 4) Start servos");
+	printf("\n\t 5) Stop servos");
+	printf("\n\t 6) Set all servo duty");
+	printf("\n\t 7) Set servo 1 duty");
+	printf("\n\t 8) Set servo 2 duty");
 	printf("\n\t 0) Quit");
 	printf("\nInput selection ");
 }
@@ -136,12 +134,13 @@ void getDecInput(unsigned int *ptr) {
 	}
 }
 
-// Callback functions
+// button callback
 int button_callback(int var) {
 	printf("\nYou pushed the button!");
 }
 
-// callbacks for simple tests
+// IR sensor callbacks
+const int debounceDelay = 5000; // why not just use #define?
 clock_t ir_1_debounce;
 int ir_sensor_1_callback(int var) {
 	if ((clock() - ir_1_debounce) > debounceDelay) {
@@ -158,32 +157,11 @@ int ir_sensor_2_callback(int var) {
 	ir_2_debounce = clock();
 }
 
-// callbacks for playing with servos
-clock_t servo_1_debounce;
-int servo_1_callback(int var) {
-	if ((clock() - servo_1_debounce) > debounceDelay) {
-		printf("\nPing from IR Sensor 1");
-		servo_1.duty(1500000);
-	} else {
-		servo_1.duty(1470000);
-	}
-	servo_1_debounce = clock();
-}
-
-// servo_2 does not seem to be responding
-clock_t servo_2_debounce;
-int servo_2_callback(int var) {
-	if ((clock() - servo_2_debounce) > debounceDelay) {
-		printf("\nPing from IR Sensor 2");
-		servo_2.duty(1500000);
-	} else {
-		servo_2.duty(1450000);
-	}
-	servo_2_debounce = clock();
-}
-
 // Main function
 int main(int argc, char* argv[]) {
+	
+	unsigned int menu_choice;
+	unsigned int n;
 	
 	system("clear");
 	
@@ -207,17 +185,37 @@ int main(int argc, char* argv[]) {
 			break;
 			
 			case 3:
-				servo_1.start();
-				servo_2.start();
-				ir_sensor_1.run(&servo_1_callback);
-				ir_sensor_2.run(&servo_2_callback);
+				ir_sensor_1.stop();
+				ir_sensor_2.stop();
 			break;
 			
 			case 4:
+				servo_1.start();
+				servo_2.start();
+			break;
+			
+			case 5:
 				servo_1.stop();
 				servo_2.stop();
-				ir_sensor_1.stop();
-				ir_sensor_2.stop();
+			break;
+			
+			case 6:
+				printf("\nInput duty: ");
+				getDecInput(&n);
+				servo_1.duty(n);
+				servo_2.duty(n);
+			break;
+			
+			case 7:
+				printf("\nInput duty: ");
+				getDecInput(&n);
+				servo_1.duty(n);
+			break;
+			
+			case 8:
+				printf("\nInput duty: ");
+				getDecInput(&n);
+				servo_2.duty(n);
 			break;
 			
 			case 0:
