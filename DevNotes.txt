@@ -170,3 +170,7 @@ hwclock -s -f /dev/rtc1
 Running the proper commands after bootup to set the system type from 
 the chip is supposed to be set up as a service. Review the Adafruit 
 instructions for information on how to do this.
+
+POWERING THE BEAGLEBONE
+
+The BBB may be powered by supplying 5v to the SYS_5V pin.
