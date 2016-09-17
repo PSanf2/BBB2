@@ -116,6 +116,7 @@ void printMenu() {
 	printf("\n\t 6) Set all servo duty");
 	printf("\n\t 7) Set servo 1 duty");
 	printf("\n\t 8) Set servo 2 duty");
+	printf("\n\t 9) Get analog sensor readings");
 	printf("\n\t 0) Quit");
 	printf("\nInput selection ");
 }
@@ -216,6 +217,11 @@ int main(int argc, char* argv[]) {
 				printf("\nInput duty: ");
 				getDecInput(&n);
 				servo_2.duty(n);
+			break;
+			
+			case 9:
+				printf("\nlight_sensor_1: %i", light_sensor_1.value());
+				printf("\nlight_sensor_2: %i", light_sensor_2.value());
 			break;
 			
 			case 0:
