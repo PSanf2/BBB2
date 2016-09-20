@@ -79,7 +79,9 @@
 #include "Button.h"
 #include "LightSensor.h"
 #include "Servo.h"
-#include "IR_LED_Sensor.h"
+//#include "IR_LED_Sensor.h"
+#include "IR_LED.h"
+#include "IR_Sensor.h"
 
 // Define where my pins are
 #define BUTTON_PIN		"P8_14"
@@ -88,9 +90,10 @@
 #define LIGHT_SENSOR_PIN_2	"P9_40"
 #define SERVO_PIN_1			"P9_22"
 #define SERVO_PIN_2			"P9_42" // don't put the second servo on the same PWM channel.
-#define IR_LED_PIN_1		"P8_19"
+//#define IR_LED_PIN_1		"P8_19"
+#define IR_LED_PIN		"P8_19"
 #define IR_SENSOR_PIN_1		"P8_12"
-#define IR_LED_PIN_2		"P9_14" // don't put the second IR LED on the same PWM channel.
+//#define IR_LED_PIN_2		"P9_14" // don't put the second IR LED on the same PWM channel.
 #define IR_SENSOR_PIN_2		"P8_10"
 
 // 'cause I got to
@@ -102,8 +105,11 @@ PatricksDrivers::LightSensor light_sensor_1(LIGHT_SENSOR_PIN_1);
 PatricksDrivers::LightSensor light_sensor_2(LIGHT_SENSOR_PIN_2);
 PatricksDrivers::Servo servo_1(SERVO_PIN_1);
 PatricksDrivers::Servo servo_2(SERVO_PIN_2);
-PatricksDrivers::IR_LED_Sensor ir_sensor_1(IR_LED_PIN_1, IR_SENSOR_PIN_1);
-PatricksDrivers::IR_LED_Sensor ir_sensor_2(IR_LED_PIN_2, IR_SENSOR_PIN_2);
+//PatricksDrivers::IR_LED_Sensor ir_sensor_1(IR_LED_PIN_1, IR_SENSOR_PIN_1);
+//PatricksDrivers::IR_LED_Sensor ir_sensor_2(IR_LED_PIN_2, IR_SENSOR_PIN_2);
+PatricksDrivers::IR_LED ir_led(IR_LED_PIN);
+PatricksDrivers::IR_Sensor ir_sensor_1(IR_SENSOR_PIN_1);
+PatricksDrivers::IR_Sensor ir_sensor_2(IR_SENSOR_PIN_2);
 
 // Functions to put things on the screen.
 void printMenu() {
@@ -181,11 +187,13 @@ int main(int argc, char* argv[]) {
 			break;
 			
 			case 2:
+				ir_led.run();
 				ir_sensor_1.run(&ir_sensor_1_callback);
 				ir_sensor_2.run(&ir_sensor_2_callback);
 			break;
 			
 			case 3:
+				ir_led.stop();
 				ir_sensor_1.stop();
 				ir_sensor_2.stop();
 			break;
