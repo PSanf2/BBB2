@@ -89,10 +89,11 @@
 #define LIGHT_SENSOR_PIN_1	"P9_38"
 #define LIGHT_SENSOR_PIN_2	"P9_40"
 #define SERVO_PIN_1			"P9_22"
-#define SERVO_PIN_2			"P9_42" // don't put the second servo on the same PWM channel.
+#define SERVO_PIN_2			"P9_14" // don't put the second servo on the same PWM channel.
 //#define IR_LED_PIN_1		"P8_19"
 #define IR_LED_PIN		"P8_19"
-#define IR_SENSOR_PIN_1		"P8_12"
+//#define IR_SENSOR_PIN_1		"P8_12"
+#define IR_SENSOR_PIN_1		"P8_07" // Put the IR sensor inputs on pins w/ internal pull-ups
 //#define IR_LED_PIN_2		"P9_14" // don't put the second IR LED on the same PWM channel.
 #define IR_SENSOR_PIN_2		"P8_10"
 

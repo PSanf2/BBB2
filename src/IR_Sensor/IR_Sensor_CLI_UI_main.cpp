@@ -18,7 +18,7 @@
 #include "IR_Sensor.h"
 
 #define IR_LED_PIN "P8_19"
-#define IR_SENSOR_PIN "P8_12"
+#define IR_SENSOR_PIN "P8_10"
 
 using namespace std;
 
